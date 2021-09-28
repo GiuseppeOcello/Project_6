@@ -11,6 +11,7 @@
   --color-neutral-light: #D2D2D2;
   --color-keys: #37474F;
   --color-keys-light: #E5E5E5;
+  --color-keys-disabled: #fcfcfc;
   --font-size-large: 60px;
   --font-size-medium: 20px;
   --transition: all .2s ease-in-out;
@@ -54,6 +55,10 @@ button {
   -o-transition: var(--transition);
   transition: var(--transition);
 }
+
+/* button:disabled {
+  background-color: var(--color-keys-disabled);
+} */
 
 .main-container {
   display: flex;
