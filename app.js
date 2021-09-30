@@ -3,7 +3,6 @@
 let keyboard = document.querySelector('#querty');
 let phrase = document.querySelector('#phrase ul');
 let btn_start = document.querySelector('.btn__reset');
-let letters = document.querySelectorAll('.letter');
 
 // Variable used to keep track of the points of the player
 let missed = 0;
@@ -32,15 +31,20 @@ const phraseArray = getRandomPhraseAsArray(phrases);
 
 
 function addPhraseToDisplay (arr) {
+   console.log("I have been called");
    
-   let li = document.createElement("li");
-   let letter = li.textContent;
-   for (let i=0; i <=arr.lenght; i++ ) {
+   
+   // let letter = li.textContent;
+   for (let i=0; i <=arr.length; i++ ) {
+      const li = document.createElement('li');
+      let letter = arr[i];
       
-      letter = arr[i];
-      if (letter.indexOf(' ') < 0) {
+      if (letter !== " ") {
          li.className = "letter";
       }
+
+      li.textContent = letter;
+      console.log(letter);
       phrase.appendChild(li);
    }
 
@@ -53,22 +57,48 @@ console.log(phrase);
 const buttons = document.querySelectorAll("#querty button");
 // for (const button of buttons) {
 qwerty.addEventListener('click', (e) => {
-let clickedButton = e.target;
-clickedButton.className = 'chosen';
-clickedButton.disabled = 'true';
-
-console.log(clickedButton.className);
-
-checkLetter(clickedButton);
-
-
-function checkLetter (clickedButton) {
    
-   for (let i = 0; letters.length; i++) {
-      if (letters[i].textContent === clickedButton) {
-         letters[i].className = "show";
+   let clickedButton = e.target;
+   console.log(clickedButton.textContent);
 
-      }
+   // It verifies that what is clicked is a button
+   if (clickedButton.type === "submit") {
+   clickedButton.className = 'chosen';
+   clickedButton.disabled = 'true';
    }
-}
+
+   console.log(clickedButton.className);
+
+   // calling the checkLetter Function
+   checkLetter(clickedButton);
+
+   function checkLetter (clickedButton) {
+      let letters = document.querySelectorAll('.letter');
+      for (let i = 0; letters.length; i++) {
+         if (letters[i].textContent === clickedButton.textContent) {
+            letters[i].classList.add("show");
+            let letterFound = letters[i];
+         } else {
+            let scoreBoard = document.querySelectorAll('.tries img');
+            console.log(scoreBoard);
+            letterFound = null;
+            missed += 1;
+            console.log(missed);
+            scoreBoard[missed-1].src = "images/lostHeart.png";
+
+         }
+      }
+      // return letterFound;
+   }
+
+   // const score = document.querySelectorAll('.tries')
+   // if (letterFound === null ) {
+   //    missed += 1;
+
+   // }
+
+   // function checkWin () {
+
+
+   // }
 });
