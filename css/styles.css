@@ -43,6 +43,11 @@ h2 {
   margin: 0;
 }
 
+p {
+  font-size: var(--font-size-medium);
+
+}
+
 button {
   margin: 6px;
   border: 1px solid transparent;
@@ -54,6 +59,7 @@ button {
   -webkit-transition: var(--transition);
   -o-transition: var(--transition);
   transition: var(--transition);
+  cursor: pointer;
 }
 
 /* button:disabled {
@@ -122,6 +128,7 @@ button {
   background: #FFFFFF;
   border-radius: 5px;
   font-size: var(--font-size-medium);
+  cursor: pointer;
 }
 
 /* Overlay */
