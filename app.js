@@ -1,6 +1,6 @@
 // Global Variables
 
-let keyboard = document.querySelector('#querty');
+let keyboard = document.querySelector('#qwerty');
 let phrase = document.querySelector('#phrase ul');
 let btn_start = document.querySelector('.btn__reset');
 let scoreBoard = document.querySelectorAll('.tries img');
@@ -49,9 +49,19 @@ function addPhraseToDisplay (arr) {
 
       if (letter !== " ") {
          li.className = "letter";
+      } else {
+         li.className = "space";
       }
       
    }
+   createHelp();
+}
+
+function createHelp () {
+   const li = document.createElement('li');
+   li.textContent = 'Hint';
+   li.className = "hint";
+   phrase.appendChild(li); 
 }
 
 // Calls the function to display the phrase 
@@ -59,7 +69,7 @@ addPhraseToDisplay(phraseArray);
 let letters = document.querySelectorAll('.letter');
 
 //## Listens for Buttom clicks and compares the letters with the random phrase 
-qwerty.addEventListener('click', (e) => {
+keyboard.addEventListener('click', (e) => {
    
    let clickedButton = e.target;
 
@@ -74,8 +84,8 @@ qwerty.addEventListener('click', (e) => {
 
    function checkLetter (clickedButton) {
       
-      
       let letterFound = 0;
+
       for (let i = 0; i < letters.length; i++) {
          let letter = letters[i];
       
@@ -84,7 +94,7 @@ qwerty.addEventListener('click', (e) => {
             letterFound += 1;
          }       
       }
-         if (letterFound == 0) {
+         if (letterFound == 0  && clickedButton.type == "submit") {
             letterFound = null;
             missed += 1;
             scoreBoard[missed-1].src = "images/lostHeart.png";
@@ -109,15 +119,12 @@ function checkWin (missed) {
    }
 
    if (show.length === letters.length) {
-
       output('win',winningText);
-
    } else if (missed > 4) {
-
       output('lose',losingText);
       let p = document.createElement('p');
       p.textContent = ` The Phrase was: "${phraseArray.join("")}"`;
       overlay.appendChild(p);
-
    }
 }
+

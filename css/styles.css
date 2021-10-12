@@ -12,6 +12,7 @@
   --color-keys: #37474F;
   --color-keys-light: #E5E5E5;
   --color-keys-disabled: #fcfcfc;
+  --color-keys-hover: rgb(56, 56, 228);
   --font-size-large: 60px;
   --font-size-medium: 20px;
   --transition: all .2s ease-in-out;
@@ -62,9 +63,11 @@ button {
   cursor: pointer;
 }
 
-/* button:disabled {
-  background-color: var(--color-keys-disabled);
-} */
+button:hover {
+  transform: scale(1.1);
+  font-weight: bold;
+  color: var(--color-keys-hover);
+}
 
 .main-container {
   display: flex;
@@ -88,6 +91,18 @@ button {
 
 /* Phrase */
 
+.section li {
+  height: 65px;
+  width: 65px;
+  transition: all .4s ease-in-out;
+}
+
+.space {
+  height: 65px;
+  width: 30px;
+  background: white;
+}
+
 .letter {
   font-size: var(--font-size-medium);
   height: 65px;
@@ -99,13 +114,32 @@ button {
   border-radius: 5px;
 }
 
-.space {
-  width: 15px;
+.hint {
+  font-size: 30px;
+  color: #5b85b7;
+  margin-left: 30px;
+  cursor: pointer;
+  position: relative;
+}
+
+.hint::after {
+  content: "It cost one point";
+  color: #445069;
+  visibility: hidden;
+  position: absolute;
+  right: 10px;
+}
+
+.hint:hover .hint::after {
+  visibility: visible;
 }
 
 .show {
   color: #000;
   background-color: #76CE82;
+  box-shadow: 1px 2px 3px cyan;
+  font-size: 25px;
+  transform: scale(0.9) rotate(365deg);
 }
 
 /* Keyboard */
@@ -144,6 +178,7 @@ button {
   left: 0;
   right: 0;
   border-radius: 5px;
+  z-index: 100;
 }
 
 .title {
