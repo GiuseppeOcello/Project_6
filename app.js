@@ -5,6 +5,10 @@ let phrase = document.querySelector('#phrase ul');
 let btn_start = document.querySelector('.btn__reset');
 let scoreBoard = document.querySelectorAll('.tries img');
 let overlay = document.querySelector("#overlay");
+// let phraseArray = '';
+// let hint = '';
+// let hint = document.querySelector(".hint");
+
 
 // Variable used to keep track of the points of the player
 let missed = 0;
@@ -14,8 +18,48 @@ btn_start.addEventListener('click', ()=> {
 
    btn_start.parentElement.style.display = 'none';
 
+   // start();
+   // Calling the getRandomPhraseAsArray
+   // phraseArray = getRandomPhraseAsArray(phrases);
+   // Calls the function to display the phrase 
+   // addPhraseToDisplay(phraseArray);
+   
    if (btn_start.textContent !== 'Start Game') {
-      location.reload();
+      // location.reload();
+
+         missed = 0;
+         letterFound = 0;
+         let chosen = document.querySelectorAll('.chosen');
+         
+         for (let i = 0; i < scoreBoard.length; i++) {
+            scoreBoard[i].src = "images/liveHeart.png";
+         }
+      
+         let child =  phrase.lastElementChild; 
+         while (child) {
+            phrase.removeChild(child);
+            child = phrase.lastElementChild;
+         }
+      
+         for (let i = 0; i < chosen.length; i++) {
+            chosen[i].classList.remove('chosen');
+            chosen[i].disabled = 'none';
+         }  
+
+         // removes the paragraph showing the unfound word in the overlay screen
+         overlay.lastChild.remove();
+
+         letters = "";
+         clickedButton = "";
+         phraseArray = "";
+         lettersToShow = '';
+      
+         // start();
+         // Calling the getRandomPhraseAsArray
+         phraseArray = getRandomPhraseAsArray(phrases);
+         // Calls the function to display the phrase 
+         addPhraseToDisplay(phraseArray);
+
    } 
 });
 
@@ -28,19 +72,11 @@ const phrases = [
    'The sun is huge'
 ];
 
-// Randomly picks on phrase from the phrases array
-function getRandomPhraseAsArray (arr) {
-   let PhraseNumber = generateRandomNumber(arr.length); 
-   let splitPhrase = arr[PhraseNumber].split("");
-   return splitPhrase;
-}
-
 // Generates a random numbers given the upper and lower limits
 function generateRandomNumber (upper, lower = 0) {
    let randomNumber = Math.floor(Math.random() * (upper - lower) ) + lower;
    return randomNumber;
 }
-
 
 // Reusable function to create new elements and append 
 function createNewElement (elementName, property, value, appendTo) {
@@ -49,6 +85,12 @@ function createNewElement (elementName, property, value, appendTo) {
    appendTo.appendChild(element);
 }
 
+// Randomly picks on phrase from the phrases array
+function getRandomPhraseAsArray (arr) {
+   let PhraseNumber = generateRandomNumber(arr.length); 
+   let splitPhrase = arr[PhraseNumber].split("");
+   return splitPhrase;
+}
 
 // Displays the phrase as li blocks on the screen
 function addPhraseToDisplay (arr) {
@@ -69,16 +111,21 @@ function addPhraseToDisplay (arr) {
    // create a hint button next to the lis
    createNewElement('button','textContent', 'Hint', phrase);
    element.className = "hint";
+
 }
 
+// function start () {
 // Calls the functions to randomly select the phrase 
-let phraseArray = getRandomPhraseAsArray(phrases);
+phraseArray = getRandomPhraseAsArray(phrases);
 addPhraseToDisplay(phraseArray);
+
+// }
 let letters = document.querySelectorAll('.letter');
+
 
 //## Listens for Buttom clicks and compares the letters with the random phrase 
 keyboard.addEventListener('click', (e) => {
-   
+
    let clickedButton = e.target;
 
    // It verifies that what is clicked is a button
@@ -142,6 +189,11 @@ let hint = document.querySelector(".hint");
 
 // listen for clicks to the hint button and show few random letters
 hint.addEventListener("click", () => {
+   // let clicked = e.target;
+
+// function hint () {
+
+      // if (clicked.className == 'hint') {
 
       let lettersToShow = Math.ceil(phraseArray.length * 0.1);
       let i = 0;
@@ -154,8 +206,11 @@ hint.addEventListener("click", () => {
          i++;
       }
       hint.style.display = "none";
+      // clicked.style.display = "none";
 
       // the hint remove one life
       missed += 1;
       scoreBoard[missed-1].src = "images/lostHeart.png";
+   // }
+   // }
 });
