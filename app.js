@@ -9,8 +9,7 @@ let overlay = document.querySelector("#overlay");
 // Variable used to keep track of the points of the player
 let missed = 0;
 
-// Hides the overlay when the start button is clicked and
-// refresh the page if the button says restart
+// Hides the overlay when the start button is clicked and refresh the page if the button says restart
 btn_start.addEventListener('click', ()=> {
 
    btn_start.parentElement.style.display = 'none';
@@ -26,45 +25,54 @@ const phrases = [
    'The moon is gray',
    'The tallest mountain is Everest',
    'The biggest ocean is the Pacific Ocean',
-   'The sun is big'
+   'The sun is huge'
 ];
 
 // Randomly picks on phrase from the phrases array
 function getRandomPhraseAsArray (arr) {
-   let randN = Math.floor(Math.random() * (arr.length - 0) ) + 0; 
-   let splitArr = arr[randN].split("");
-   return splitArr;
+   let PhraseNumber = generateRandomNumber(arr.length); 
+   let splitPhrase = arr[PhraseNumber].split("");
+   return splitPhrase;
 }
 
-const phraseArray = getRandomPhraseAsArray(phrases);
+// Generates a random numbers given the upper and lower limits
+function generateRandomNumber (upper, lower = 0) {
+   let randomNumber = Math.floor(Math.random() * (upper - lower) ) + lower;
+   return randomNumber;
+}
 
-// Displays blocks on the screen
+
+// Reusable function to create new elements and append 
+function createNewElement (elementName, property, value, appendTo) {
+   element = document.createElement(elementName);
+   element[property] = value;
+   appendTo.appendChild(element);
+}
+
+
+// Displays the phrase as li blocks on the screen
 function addPhraseToDisplay (arr) {
    
    for (let i=0; i <arr.length; i++ ) {
-      const li = document.createElement('li');
-      let letter = arr[i]; 
-      li.textContent = letter;
-      phrase.appendChild(li); 
+      let letter = arr[i];
+      createNewElement('li','textContent', letter, phrase);  
 
       if (letter !== " ") {
-         li.className = "letter";
+         element.className = "letter";
+
       } else {
-         li.className = "space";
+         element.className = "space";
       }
       
    }
-   createHelp();
+
+   // create a hint button next to the lis
+   createNewElement('button','textContent', 'Hint', phrase);
+   element.className = "hint";
 }
 
-function createHelp () {
-   const li = document.createElement('li');
-   li.textContent = 'Hint';
-   li.className = "hint";
-   phrase.appendChild(li); 
-}
-
-// Calls the function to display the phrase 
+// Calls the functions to randomly select the phrase 
+let phraseArray = getRandomPhraseAsArray(phrases);
 addPhraseToDisplay(phraseArray);
 let letters = document.querySelectorAll('.letter');
 
@@ -88,7 +96,7 @@ keyboard.addEventListener('click', (e) => {
 
       for (let i = 0; i < letters.length; i++) {
          let letter = letters[i];
-      
+   
          if (letter.textContent.toLocaleLowerCase() === clickedButton.textContent) {
             letter.classList.add("show");
             letterFound += 1;
@@ -104,27 +112,50 @@ keyboard.addEventListener('click', (e) => {
    checkWin(missed);
 });
 
+// Checks if the player wins or loses and display the respective overlay screen with the button to restart
 function checkWin (missed) {
    let show = document.querySelectorAll('.show');
    let title = document.querySelector(".title");
 
+   // custom text for the overaly screen
    const winningText = 'Yeah, You Won!';
    const losingText = 'Oops, You Lost. Try again.';
 
-   function output (classN, overlayText) {
-      overlay.classList.add(classN);
+   // reusable function that changes the content in the overlay screen
+   function output (classToAssign, overlayText) {
+      overlay.classList.add(classToAssign);
       title.innerHTML = overlayText;
       btn_start.textContent = 'Restart';
       overlay.style.display = 'flex';
    }
 
+   //  compares if the number of letters with class .letter and .show are equal and define wether the player wins or not
    if (show.length === letters.length) {
       output('win',winningText);
    } else if (missed > 4) {
       output('lose',losingText);
-      let p = document.createElement('p');
-      p.textContent = ` The Phrase was: "${phraseArray.join("")}"`;
-      overlay.appendChild(p);
+      createNewElement('p','textContent', ` The Phrase was: "${phraseArray.join("")}"`, overlay);  
    }
 }
 
+let hint = document.querySelector(".hint");
+
+// listen for clicks to the hint button and show few random letters
+hint.addEventListener("click", () => {
+
+      let lettersToShow = Math.ceil(phraseArray.length * 0.1);
+      let i = 0;
+
+      // Picks few random letters to show and hides the hint button
+      while (i < lettersToShow) {
+         let randomHint = generateRandomNumber(letters.length);
+         let letterToShow = letters[randomHint];
+         letterToShow.classList.add("show");
+         i++;
+      }
+      hint.style.display = "none";
+
+      // the hint remove one life
+      missed += 1;
+      scoreBoard[missed-1].src = "images/lostHeart.png";
+});

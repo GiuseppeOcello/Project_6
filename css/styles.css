@@ -83,6 +83,11 @@ button:hover {
   padding: 10px;
 }
 
+img {
+  height: 35px;
+  width: 30px;
+}
+
 /* Title */
 
 .header {
@@ -103,35 +108,22 @@ button:hover {
   background: white;
 }
 
-.letter {
+.letter, .hint {
   font-size: var(--font-size-medium);
-  height: 65px;
-  width: 65px;
   padding: 20px 1px 0 1px;
   margin-right: 2px;
   color: transparent;
   background: var(--color-neutral-light);
   border-radius: 5px;
+
 }
 
 .hint {
-  font-size: 30px;
+  height: 65px;
+  width: 65px;
   color: #5b85b7;
-  margin-left: 30px;
   cursor: pointer;
-  position: relative;
-}
-
-.hint::after {
-  content: "It cost one point";
-  color: #445069;
-  visibility: hidden;
-  position: absolute;
-  right: 10px;
-}
-
-.hint:hover .hint::after {
-  visibility: visible;
+  background: transparent;
 }
 
 .show {
@@ -140,6 +132,7 @@ button:hover {
   box-shadow: 1px 2px 3px cyan;
   font-size: 25px;
   transform: scale(0.9) rotate(365deg);
+  animation-name: letters;
 }
 
 /* Keyboard */
@@ -179,6 +172,7 @@ button:hover {
   right: 0;
   border-radius: 5px;
   z-index: 100;
+  transition: all 0.3s ease-in;
 }
 
 .title {
@@ -193,8 +187,16 @@ button:hover {
   color: var(--color-win);
 }
 
+.win, .lose, .show {
+  animation-duration: 0.3s;
+  animation-timing-function: ease-in-out;
+  animation-iteration-count: 3;
+}
+
 .win {
   background-color: var(--color-win);
+  animation-name: showWin;
+  
 }
 
 .win a {
@@ -203,8 +205,26 @@ button:hover {
 
 .lose {
   background-color: var(--color-lose);
+  animation-name: showLose;
 }
 
 .lose a {
   color: var(--color-lose);
+}
+
+
+/* === Animations === */
+@keyframes showWin {
+  from {background-color: var(--color-win);}
+  to {background-color: rgb(0, 255, 64);}  
+}
+
+@keyframes showLose {
+  from {background-color: var(--color-lose);}
+  to {background-color: rgb(255, 94, 0);}  
+}
+
+@keyframes letters {
+  from {background: #76CE82}
+  to {background-color: #76ce82e5;}  
 }
