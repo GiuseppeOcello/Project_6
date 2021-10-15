@@ -5,9 +5,10 @@ let phrase = document.querySelector('#phrase ul');
 let btn_start = document.querySelector('.btn__reset');
 let scoreBoard = document.querySelectorAll('.tries img');
 let overlay = document.querySelector("#overlay");
-// let phraseArray = '';
-// let hint = '';
-// let hint = document.querySelector(".hint");
+let splitPhrase;
+let lettersToShow;
+let letters;
+let hint;
 
 
 // Variable used to keep track of the points of the player
@@ -17,15 +18,9 @@ let missed = 0;
 btn_start.addEventListener('click', ()=> {
 
    btn_start.parentElement.style.display = 'none';
-
-   // start();
-   // Calling the getRandomPhraseAsArray
-   // phraseArray = getRandomPhraseAsArray(phrases);
-   // Calls the function to display the phrase 
-   // addPhraseToDisplay(phraseArray);
+   addPhraseToDisplay(getRandomPhraseAsArray(phrases));
    
    if (btn_start.textContent !== 'Start Game') {
-      // location.reload();
 
          missed = 0;
          letterFound = 0;
@@ -43,22 +38,19 @@ btn_start.addEventListener('click', ()=> {
       
          for (let i = 0; i < chosen.length; i++) {
             chosen[i].classList.remove('chosen');
-            chosen[i].disabled = 'none';
+            chosen[i].disabled = false;
          }  
 
-         // removes the paragraph showing the unfound word in the overlay screen
+         // reset the overlay screen
          overlay.lastChild.remove();
+         overlay.classList.remove('win', 'lose');
 
+         // reset global variables
          letters = "";
          clickedButton = "";
-         phraseArray = "";
-         lettersToShow = '';
+         lettersToShow = ''; 
       
-         // start();
-         // Calling the getRandomPhraseAsArray
-         phraseArray = getRandomPhraseAsArray(phrases);
-         // Calls the function to display the phrase 
-         addPhraseToDisplay(phraseArray);
+         addPhraseToDisplay(getRandomPhraseAsArray(phrases));
 
    } 
 });
@@ -69,7 +61,16 @@ const phrases = [
    'The moon is gray',
    'The tallest mountain is Everest',
    'The biggest ocean is the Pacific Ocean',
-   'The sun is huge'
+   'The sun is huge',
+   'Europa is the smallest moon orbiting Jupiter',
+   'The deepest place on earth is the trench of Mariana',
+   'The CPU is the hearth of a computer',
+   'The capital of Australia is Camberra',
+   'JavaScript is awesome',
+   'Computers speak in binary language',
+   'The greatest invention in mothern age is the Transistor',
+   'Russia is the largest conutry on earth',
+   'The Canary Islands are named after dogs'
 ];
 
 // Generates a random numbers given the upper and lower limits
@@ -88,7 +89,7 @@ function createNewElement (elementName, property, value, appendTo) {
 // Randomly picks on phrase from the phrases array
 function getRandomPhraseAsArray (arr) {
    let PhraseNumber = generateRandomNumber(arr.length); 
-   let splitPhrase = arr[PhraseNumber].split("");
+   splitPhrase = arr[PhraseNumber].split("");
    return splitPhrase;
 }
 
@@ -108,19 +109,41 @@ function addPhraseToDisplay (arr) {
       
    }
 
+   letters = document.querySelectorAll('.letter');
+
    // create a hint button next to the lis
    createNewElement('button','textContent', 'Hint', phrase);
    element.className = "hint";
 
+   hint = document.querySelector(".hint");
+   lettersToShow = Math.ceil(arr.length * 0.1);
 }
 
-// function start () {
-// Calls the functions to randomly select the phrase 
-phraseArray = getRandomPhraseAsArray(phrases);
-addPhraseToDisplay(phraseArray);
+function showHint () {
 
-// }
-let letters = document.querySelectorAll('.letter');
+   let i = 0;
+
+   // Picks few random letters to show and hides the hint button
+   while (i < lettersToShow) {
+      let randomHint = generateRandomNumber(letters.length);
+      letterToShow = letters[randomHint];
+      letterToShow.classList.add("show");
+      i++;
+   }
+   hint.style.display = "none";
+
+   // the hint removes one life
+   missed += 1;
+   scoreBoard[missed-1].src = "images/lostHeart.png";
+
+}
+
+// listens for the click of the hint button
+document.addEventListener("click", (e) => {
+   if (e.target.className == "hint") {
+      showHint();
+   }
+});
 
 
 //## Listens for Buttom clicks and compares the letters with the random phrase 
@@ -137,6 +160,8 @@ keyboard.addEventListener('click', (e) => {
    // calling the checkLetter Function
    checkLetter(clickedButton);
 
+   // Checks if the letter clicked by the player matches some of the letter in the phrase and shows them to the screen
+   // It also increment the missed variable and changes the icons in the score boards to lost
    function checkLetter (clickedButton) {
       
       let letterFound = 0;
@@ -181,36 +206,7 @@ function checkWin (missed) {
       output('win',winningText);
    } else if (missed > 4) {
       output('lose',losingText);
-      createNewElement('p','textContent', ` The Phrase was: "${phraseArray.join("")}"`, overlay);  
+      createNewElement('p','textContent', ` The Phrase was: "${splitPhrase.join("")}"`, overlay);  
    }
 }
 
-let hint = document.querySelector(".hint");
-
-// listen for clicks to the hint button and show few random letters
-hint.addEventListener("click", () => {
-   // let clicked = e.target;
-
-// function hint () {
-
-      // if (clicked.className == 'hint') {
-
-      let lettersToShow = Math.ceil(phraseArray.length * 0.1);
-      let i = 0;
-
-      // Picks few random letters to show and hides the hint button
-      while (i < lettersToShow) {
-         let randomHint = generateRandomNumber(letters.length);
-         let letterToShow = letters[randomHint];
-         letterToShow.classList.add("show");
-         i++;
-      }
-      hint.style.display = "none";
-      // clicked.style.display = "none";
-
-      // the hint remove one life
-      missed += 1;
-      scoreBoard[missed-1].src = "images/lostHeart.png";
-   // }
-   // }
-});
