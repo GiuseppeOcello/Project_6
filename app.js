@@ -116,6 +116,8 @@ function addPhraseToDisplay (arr) {
    element.className = "hint";
 
    hint = document.querySelector(".hint");
+
+   // set a number of letter to show if the hint is called
    lettersToShow = Math.ceil(arr.length * 0.1);
 }
 
